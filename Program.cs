@@ -1,9 +1,23 @@
+using Microsoft.EntityFrameworkCore;
+using MvcEldenRingBossLore.Models;
+using MvcEldenRingBossLore.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Configure database - using SQLite for all environments (macOS compatible)
+builder.Services.AddDbContext<MvcEldenRingBossLoreContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("MvcEldenRingBossLoreContext") ?? "Data Source=MvcEldenRingBossLore.db"));
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    SeedData.Initialize(services);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
