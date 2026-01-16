@@ -1,3 +1,4 @@
+// Created by Nicholas Maddox
 namespace MvcEldenRingBossLore.Models;
 
 public class ErrorViewModel

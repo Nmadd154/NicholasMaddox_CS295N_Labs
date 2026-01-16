@@ -1,3 +1,4 @@
+// Created by Nicholas Maddox
 using Microsoft.EntityFrameworkCore;
 using MvcEldenRingBossLore.Models;
 using MvcEldenRingBossLore.Data;
