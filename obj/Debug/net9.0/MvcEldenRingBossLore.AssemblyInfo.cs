@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MvcEldenRingBossLore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b9afbd944b92cd8b14b8b8fc6576f51a53cdeac7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+621182214c52a1e81ebe86424d31174e228da334")]
 [assembly: System.Reflection.AssemblyProductAttribute("MvcEldenRingBossLore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MvcEldenRingBossLore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
