@@ -25,8 +25,8 @@ namespace MvcEldenRingBossLore.Controllers
             }
             // Use LINQ to get list of types.
             IQueryable<string> loreQuery = from m in _context.Lore
-                                             orderby m.Genre
-                                             select m.Genre;
+                                             orderby m.GodType
+                                             select m.GodType;
             var lore = from m in _context.Lore
                     select m;
             if (!string.IsNullOrEmpty(searchString))
@@ -35,7 +35,7 @@ namespace MvcEldenRingBossLore.Controllers
             }
             if (!string.IsNullOrEmpty(loreType))
             {
-                lore = lore.Where(x => x.Genre == loreType);
+                lore = lore.Where(x => x.GodType == loreType);
             }
             var loreTypesVM = new LoreTypeViewModel
             {
@@ -73,7 +73,7 @@ namespace MvcEldenRingBossLore.Controllers
         // POST: Lore/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Genre,Price")] Lore lore)
+        public async Task<IActionResult> Create([Bind("Id,Title,DiscoveryDate,GodType,Notes")] Lore lore)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +103,7 @@ namespace MvcEldenRingBossLore.Controllers
         // POST: Lore/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseDate,Genre,Price")] Lore lore)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,DiscoveryDate,GodType,Notes")] Lore lore)
         {
             if (id != lore.Id)
             {

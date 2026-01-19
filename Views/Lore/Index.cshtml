@@ -5,7 +5,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Lore</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -17,7 +17,7 @@
             <option value="">All</option>
         </select>
 
-        <label>Title: <input type="text" asp-for="SearchString" /></label>
+        <label>Character: <input type="text" asp-for="SearchString" /></label>
         <input type="submit" value="Filter" />
     </p>
 </form>
@@ -29,13 +29,13 @@
                 @Html.DisplayNameFor(model => model.Lores![0].Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Lores![0].ReleaseDate)
+                @Html.DisplayNameFor(model => model.Lores![0].DiscoveryDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Lores![0].Genre)
+                @Html.DisplayNameFor(model => model.Lores![0].GodType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Lores![0].Price)
+                @Html.DisplayNameFor(model => model.Lores![0].Notes)
             </th>
             <th></th>
         </tr>
@@ -48,13 +48,13 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ReleaseDate)
+                    @Html.DisplayFor(modelItem => item.DiscoveryDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Genre)
+                    @Html.DisplayFor(modelItem => item.GodType)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Price)
+                    @Html.DisplayFor(modelItem => item.Notes)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

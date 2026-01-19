@@ -14,10 +14,11 @@ builder.Services.AddDbContext<MvcEldenRingBossLoreContext>(options =>
 
 var app = builder.Build();
 
+// Auto-create database based on model (dev mode - no migrations needed)
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-    SeedData.Initialize(services);
+    var db = scope.ServiceProvider.GetRequiredService<MvcEldenRingBossLoreContext>();
+    db.Database.EnsureCreated(); // Creates database automatically from model
 }
 
 // Configure the HTTP request pipeline.

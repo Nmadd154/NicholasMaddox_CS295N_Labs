@@ -23,30 +23,30 @@ public static class SeedData
                 new Lore
                 {
                     Title = "Margit, the Fell Omen",
-                    ReleaseDate = DateTime.Parse("2022-2-25"),
-                    Genre = "Demigod",
-                    Price = 7.99M
+                    DiscoveryDate = DateTime.Parse("2022-2-25"),
+                    GodType = "Demigod",
+                    Notes = "A powerful Omen who guards Stormveil Castle"
                 },
                 new Lore
                 {
                     Title = "Godrick the Grafted",
-                    ReleaseDate = DateTime.Parse("2022-2-25"),
-                    Genre = "Demigod",
-                    Price = 8.99M
+                    DiscoveryDate = DateTime.Parse("2022-2-25"),
+                    GodType = "Demigod",
+                    Notes = "Lord of Stormveil Castle who grafts limbs of defeated foes"
                 },
                 new Lore
                 {
                     Title = "Radahn, Starscourge",
-                    ReleaseDate = DateTime.Parse("2022-2-25"),
-                    Genre = "Demigod",
-                    Price = 9.99M
+                    DiscoveryDate = DateTime.Parse("2022-2-25"),
+                    GodType = "Demigod",
+                    Notes = "Legendary warrior who conquered the stars"
                 },
                 new Lore
                 {
                     Title = "Malenia, Blade of Miquella",
-                    ReleaseDate = DateTime.Parse("2022-2-25"),
-                    Genre = "Demigod",
-                    Price = 12.99M
+                    DiscoveryDate = DateTime.Parse("2022-2-25"),
+                    GodType = "Demigod",
+                    Notes = "Undefeated swordswoman cursed with Scarlet Rot"
                 }
             );
             context.SaveChanges();

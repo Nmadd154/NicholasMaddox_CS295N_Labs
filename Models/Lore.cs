@@ -8,10 +8,9 @@ public class Lore
 {
     public int Id { get; set; }
     public string? Title { get; set; }
-    [Display(Name = "Release Date")]
+    [Display(Name = "Discovery Date")]
     [DataType(DataType.Date)]
-    public DateTime ReleaseDate { get; set; }
-    public string? Genre { get; set; }
-    [Column(TypeName = "decimal(18, 2)")]
-    public decimal Price { get; set; }
+    public DateTime DiscoveryDate { get; set; }
+    public string? GodType { get; set; }
+    public string? Notes { get; set; }
 }
