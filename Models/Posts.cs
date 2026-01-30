@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MvcEldenRingBossLore.Models;
 
-public class BlogPost
+public class Posts
 {
     [Key]
     public int PostId { get; set; }

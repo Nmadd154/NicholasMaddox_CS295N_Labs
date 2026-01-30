@@ -1,5 +1,5 @@
 @* Created by Nicholas Maddox *@
-@model IEnumerable<MvcEldenRingBossLore.Models.BlogPost>
+@model IEnumerable<MvcEldenRingBossLore.Models.Posts>
 @{
     ViewData["Title"] = "Blog";
 }
@@ -7,39 +7,9 @@
 <div class="text-center">
     <h1 class="display-4">Elden Ring Lore Blog</h1>
     <p>Post, comment, and share your theories about Elden Ring lore!</p>
-    <br />
-    <a class="btn btn-success btn-lg" href="/Blog/Create" role="button">Create New Post</a>
-    <br /><br />
+    <br>
+    <a class="btn btn-success btn-lg" href="/Posts" role="button">See Posts and Make One!</a>
+    </br>
     <a class="btn btn-primary btn-lg" href="/Author" role="button">View Author</a>
     <a class="btn btn-secondary btn-lg" href="/TPLink" role="button">Top Post Link</a>
-</div>
-
-<div class="container mt-4">
-    @if (Model != null && Model.Any())
-    {
-        @foreach (var post in Model)
-        {
-            <div class="card mb-3">
-                <div class="card-header">
-                    <h3>@post.Title</h3>
-                    <small class="text-muted">
-                        By: @post.Author | Created on: @post.CreatedAt.ToString("MMM dd, yyyy") | Lore Type: @post.LoreType |
-                        @if (post.Rating > 0)
-                        {
-                            <span class="ms-2">Rating: @post.Rating/5</span>
-                        }
-                    </small>
-                </div>
-                <div class="card-body">
-                    <p class="card-text">@post.Content</p>
-                </div>
-            </div>
-        }
-    }
-    else
-    {
-        <div class="alert alert-info text-center" role="alert">
-            No blog posts yet. Be the first to create one!
-        </div>
-    }
 </div>

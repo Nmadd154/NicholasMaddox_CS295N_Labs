@@ -21,26 +21,5 @@ namespace MvcEldenRingBossLore.Controllers
         {
             return View(await _context.BlogPosts.ToListAsync());
         }
-
-        // GET: Blog/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Blog/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostId,Title,Content,Author,LoreType,Rating")] BlogPost blogPost)
-        {
-            if (ModelState.IsValid)
-            {
-                blogPost.CreatedAt = DateTime.Now;
-                _context.Add(blogPost);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(blogPost);
-        }
     }
 }

@@ -16,6 +16,6 @@ namespace MvcEldenRingBossLore.Data
         }
 
         public DbSet<MvcEldenRingBossLore.Models.Lore> Lore { get; set; } = default!;
-        public DbSet<BlogPost> BlogPosts { get; set; } = default!;
+        public DbSet<MvcEldenRingBossLore.Models.Posts> BlogPosts { get; set; } = default!;
     }
 }
