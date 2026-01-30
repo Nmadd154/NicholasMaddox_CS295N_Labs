@@ -5,6 +5,8 @@ using MvcEldenRingBossLore.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Used AI for some of the configurations during set-up to get program running properly.
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
