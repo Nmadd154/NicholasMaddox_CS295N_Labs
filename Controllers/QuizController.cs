@@ -1,3 +1,4 @@
+// Created by Nicholas Maddox
 using Microsoft.AspNetCore.Mvc;
 using MvcEldenRingBossLore.Models;
 
@@ -26,6 +27,7 @@ public class QuizController : Controller
             Answers[5] = "Ancient Dragon Lansseax";
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             var model = LoadQuestions(new QuizQuestions());
