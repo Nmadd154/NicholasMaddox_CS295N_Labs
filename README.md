@@ -29,18 +29,14 @@ This project uses **User Secrets** to keep database credentials secure. You must
 dotnet user-secrets init
 ```
 
-#### Set Your MySQL Connection Details
+#### Set Your MySQL Connection String
 
 ```bash
-# Set the base connection string (without credentials)
-dotnet user-secrets set "ConnectionStrings:MySqlBase" "server=localhost;port=3306;database=MvcEldenRingBossLore;"
-
-# Set your MySQL username
-dotnet user-secrets set "user" "your_mysql_username"
-
-# Set your MySQL password (use single quotes to avoid shell issues with special characters)
-dotnet user-secrets set "password" 'your_mysql_password'
+# Set your complete MySQL connection string (use single quotes to avoid shell issues with special characters)
+dotnet user-secrets set "ConnectionStrings:MvcEldenRingBossLoreContext" 'server=localhost;port=3306;database=MvcEldenRingBossLore;user=your_mysql_username;password=your_mysql_password'
 ```
+
+Replace `your_mysql_username` and `your_mysql_password` with your actual MySQL credentials.
 
 #### Verify Your Secrets
 

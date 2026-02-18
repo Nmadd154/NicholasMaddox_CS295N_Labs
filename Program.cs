@@ -7,16 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-var baseConn = builder.Configuration.GetConnectionString("MySqlBase");
-var user = builder.Configuration["user"];
-var password = builder.Configuration["password"];
-
-var finalConn = $"{baseConn}User={user};Password={password};";
-
 builder.Services.AddDbContext<MvcEldenRingBossLoreContext>(options =>
     options.UseMySql(
-        finalConn,
-        ServerVersion.AutoDetect(finalConn)
+        builder.Configuration.GetConnectionString("MvcEldenRingBossLoreContext"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MvcEldenRingBossLoreContext"))
     ));
 
 var app = builder.Build();
