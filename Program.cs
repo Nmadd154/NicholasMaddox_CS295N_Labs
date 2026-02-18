@@ -5,27 +5,26 @@ using MvcEldenRingBossLore.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Configure database - using SQLite for all environments (macOS compatible)
+var baseConn = builder.Configuration.GetConnectionString("MySqlBase");
+var user = builder.Configuration["user"];
+var password = builder.Configuration["password"];
+
+var finalConn = $"{baseConn}User={user};Password={password};";
+
 builder.Services.AddDbContext<MvcEldenRingBossLoreContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("MvcEldenRingBossLoreContext") ?? "Data Source=MvcEldenRingBossLore.db"));
+    options.UseMySql(
+        finalConn,
+        ServerVersion.AutoDetect(finalConn)
+    ));
 
 var app = builder.Build();
-
-// Auto-create database based on model (dev mode - no migrations needed)
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<MvcEldenRingBossLoreContext>();
-    db.Database.EnsureCreated(); // Creates database automatically from model
-}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
