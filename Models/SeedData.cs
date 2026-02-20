@@ -17,7 +17,7 @@ public static class SeedData
             // Look for any lore entries.
             if (context.Lore.Any())
             {
-                return;   // DB has been seeded
+                return;
             }
             context.Lore.AddRange(
                 new Lore

@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Created by Nicholas Maddox
+using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 

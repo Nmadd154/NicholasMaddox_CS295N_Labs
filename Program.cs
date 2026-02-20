@@ -7,13 +7,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+// Build connection string from separate components for better credential management
+var baseConnectionString = builder.Configuration.GetConnectionString("MySqlBase");
+var dbUser = builder.Configuration["DbUser"];
+var dbPassword = builder.Configuration["DbPassword"];
+
+var connectionString = $"{baseConnectionString};user={dbUser};password={dbPassword}";
+
 builder.Services.AddDbContext<MvcEldenRingBossLoreContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("MvcEldenRingBossLoreContext"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MvcEldenRingBossLoreContext"))
+        connectionString,
+        ServerVersion.AutoDetect(connectionString)
     ));
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    SeedData.Initialize(services);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

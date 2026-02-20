@@ -32,11 +32,17 @@ dotnet user-secrets init
 #### Set Your MySQL Connection String
 
 ```bash
-# Set your complete MySQL connection string (use single quotes to avoid shell issues with special characters)
-dotnet user-secrets set "ConnectionStrings:MvcEldenRingBossLoreContext" 'server=localhost;port=3306;database=MvcEldenRingBossLore;user=your_mysql_username;password=your_mysql_password'
+# Set base connection string (without credentials)
+dotnet user-secrets set "ConnectionStrings:MySqlBase" "server=localhost;port=3306;database=MvcEldenRingBossLore"
+
+# Set database credentials separately
+dotnet user-secrets set "DbUser" "your_mysql_username"
+dotnet user-secrets set "DbPassword" "your_mysql_password"
 ```
 
 Replace `your_mysql_username` and `your_mysql_password` with your actual MySQL credentials.
+
+**Note:** Separating credentials from the base connection string allows different developers to use their own credentials while sharing the same connection configuration.
 
 #### Verify Your Secrets
 
@@ -80,12 +86,14 @@ For Azure deployment, update `appsettings.Production.json` with your Azure MySQL
 ```json
 {
   "ConnectionStrings": {
-    "MvcEldenRingBossLoreContext": "server=YOUR-SERVER.mysql.database.azure.com;port=3306;database=MvcEldenRingBossLore;user=YOUR-USERNAME;password=YOUR-PASSWORD;sslmode=Required"
-  }
+    "MySqlBase": "server=YOUR-SERVER.mysql.database.azure.com;port=3306;database=MvcEldenRingBossLore;sslmode=Required"
+  },
+  "DbUser": "YOUR-USERNAME",
+  "DbPassword": "YOUR-PASSWORD"
 }
 ```
 
-**Note:** The `appsettings.json` and `appsettings.*.json` files are excluded from version control to protect credentials.
+**Note:** For production, consider using Azure Key Vault or environment variables instead of storing credentials directly in configuration files.
 
 ## Project Structure
 
