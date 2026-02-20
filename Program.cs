@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-// Build connection string from separate components for better credential management
 var baseConnectionString = builder.Configuration.GetConnectionString("MySqlBase");
 var dbUser = builder.Configuration["DbUser"];
 var dbPassword = builder.Configuration["DbPassword"];
