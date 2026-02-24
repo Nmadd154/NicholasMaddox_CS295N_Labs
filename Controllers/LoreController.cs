@@ -17,33 +17,14 @@ namespace MvcEldenRingBossLore.Controllers
         }
 
         // GET: Lore
-        public async Task<IActionResult> Index(string loreType, string searchString)
+        public async Task<IActionResult> Index()
         {
             if (_context.Lore == null)
             {
                 return Problem("Entity set 'MvcEldenRingBossLoreContext.Lore'  is null.");
             }
-            // Use LINQ to get list of types.
-            IQueryable<string> loreQuery = from m in _context.Lore
-                                             orderby m.GodType
-                                             select m.GodType;
-            var lore = from m in _context.Lore
-                    select m;
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                lore = lore.Where(s => s.Title!.Contains(searchString));
-            }
-            if (!string.IsNullOrEmpty(loreType))
-            {
-                lore = lore.Where(x => x.GodType == loreType);
-            }
-            var loreTypesVM = new LoreTypeViewModel
-            {
-                Types = new SelectList(await loreQuery.Distinct().ToListAsync()),
-                Lores = await lore.ToListAsync()
-            };
-        
-            return View(loreTypesVM);
+
+            return View(await _context.Lore.ToListAsync());
         }
 
         // GET: Lore/Details/5
@@ -84,7 +65,7 @@ namespace MvcEldenRingBossLore.Controllers
             return View(lore);
         }
 
-        // GET: Lore/Edit/5
+        // GET: Lore/Edit
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -100,7 +81,7 @@ namespace MvcEldenRingBossLore.Controllers
             return View(lore);
         }
 
-        // POST: Lore/Edit/5
+        // POST: Lore/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,DiscoveryDate,GodType,Notes")] Lore lore)
@@ -133,7 +114,7 @@ namespace MvcEldenRingBossLore.Controllers
             return View(lore);
         }
 
-        // GET: Lore/Delete/5
+        // GET: Lore/Delete
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
