@@ -17,36 +17,32 @@ namespace MvcEldenRingBossLore.Controllers
         }
 
         // GET: Lore
-        public async Task<IActionResult> Index(string loreType, string searchString)
+        public async Task<IActionResult> Index(string loreType, string searchString, string discoveryDate)
         {
             if (_context.Lore == null)
             {
                 return Problem("Entity set 'MvcEldenRingBossLoreContext.Lore'  is null.");
             }
-            // Use LINQ to get list of types.
-            IQueryable<string> loreQuery = from m in _context.Lore
-                                             orderby m.GodType
-                                             select m.GodType;
-            var lore = from m in _context.Lore
-                    select m;
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                lore = lore.Where(s => s.Title!.Contains(searchString));
-            }
-            if (!string.IsNullOrEmpty(loreType))
-            {
-                lore = lore.Where(x => x.GodType == loreType);
-            }
+
+            //LINQ
+            IQueryable<string> loreQuery = from m in _context.Lore orderby m.GodType select m.GodType;
+            
+            var lore = _context.Lore
+                .Where(l => string.IsNullOrEmpty(searchString) || l.Title!.Contains(searchString))
+                .Where(l => string.IsNullOrEmpty(loreType) || l.GodType == loreType)
+                .Where(l => string.IsNullOrEmpty(discoveryDate) || l.DiscoveryDate.Date == DateTime.Parse(discoveryDate).Date)
+                .ToList();
+            
             var loreTypesVM = new LoreTypeViewModel
             {
                 Types = new SelectList(await loreQuery.Distinct().ToListAsync()),
-                Lores = await lore.ToListAsync()
+                Lores = lore
             };
         
             return View(loreTypesVM);
         }
 
-        // GET: Lore/Details/5
+        // GET: Lore/Details
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -100,7 +96,7 @@ namespace MvcEldenRingBossLore.Controllers
             return View(lore);
         }
 
-        // POST: Lore/Edit/5
+        // POST: Lore/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,DiscoveryDate,GodType,Notes")] Lore lore)
@@ -133,7 +129,7 @@ namespace MvcEldenRingBossLore.Controllers
             return View(lore);
         }
 
-        // GET: Lore/Delete/5
+        // GET: Lore/Delete
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -151,7 +147,7 @@ namespace MvcEldenRingBossLore.Controllers
             return View(lore);
         }
 
-        // POST: Lore/Delete/5
+        // POST: Lore/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

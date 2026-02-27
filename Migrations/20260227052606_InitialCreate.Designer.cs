@@ -12,8 +12,8 @@ using MvcEldenRingBossLore.Data;
 namespace MvcEldenRingBossLore.Migrations
 {
     [DbContext(typeof(MvcEldenRingBossLoreContext))]
-    [Migration("20260218020712_Initial")]
-    partial class Initial
+    [Migration("20260227052606_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
