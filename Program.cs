@@ -19,6 +19,8 @@ builder.Services.AddDbContext<MvcEldenRingBossLoreContext>(options =>
         ServerVersion.AutoDetect(connectionString)
     ));
 
+builder.Services.AddTransient<ILoreRepo, LoreRepo>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
