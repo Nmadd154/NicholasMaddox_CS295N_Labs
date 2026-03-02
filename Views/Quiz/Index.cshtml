@@ -1,0 +1,32 @@
+@* Created by Nicholas Maddox *@
+@{
+    ViewData["Title"] = "Quiz";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Elden Ring Boss Lore Quiz</h1>
+    <p>Test your knowledge about Elden Ring bosses with this quiz!</p>
+</div>
+<form method="post">
+    @Model.Questions[1]<br />
+    <input name="answer1" value="@Model.UserAnswers[1]"/> 
+    @( (Model.UserAnswers[1] == "") ? "" : Model.Results[1] ? "Right" : "Wrong")
+    <br />
+    @Model.Questions[2]<br />
+    <input name="answer2" value="@Model.UserAnswers[2]" />
+    @((Model.UserAnswers[2] == "") ? "" : Model.Results[2] ? "Right" : "Wrong")
+    <br />
+    @Model.Questions[3]<br />
+    <input name="answer3" value="@Model.UserAnswers[3]" />
+    @((Model.UserAnswers[3] == "") ? "" : Model.Results[3] ? "Right" : "Wrong")
+    <br />
+    @Model.Questions[4]<br />
+    <input name="answer4" value="@Model.UserAnswers[4]" />
+    @((Model.UserAnswers[4] == "") ? "" : Model.Results[4] ? "Right" : "Wrong")
+    <br />
+    @Model.Questions[5]<br />
+    <input name="answer5" value="@Model.UserAnswers[5]" />
+    @((Model.UserAnswers[5] == "") ? "" : Model.Results[5] ? "Right" : "Wrong")
+    <br />
+    <input type="submit" />
+</form>

@@ -7,7 +7,10 @@ namespace MvcEldenRingBossLore.Models;
 public class LoreTypeViewModel
 {
     public List<Lore>? Lores { get; set; }
+    public List<Posts>? Posts { get; set; }
     public SelectList? Types { get; set; }
     public string? LoreType { get; set; }
     public string? SearchString { get; set; }
+    public string? DiscoveryDate { get; set; }
+    public string? CreatedDate { get; set; }
 }
