@@ -73,6 +73,18 @@ namespace MvcEldenRingBossLore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id,Title,DiscoveryDate,GodType,Notes")] Lore lore)
         {
+            if (string.IsNullOrEmpty(lore.Title))
+            {
+                ModelState.AddModelError(nameof(lore.Title),
+                    "Please enter a title");
+            }
+            
+            if (string.IsNullOrEmpty(lore.GodType))
+            {
+                ModelState.AddModelError(nameof(lore.GodType),
+                    "Please select a god type");
+            }
+
             if (ModelState.IsValid)
             {
                 _repository.CreateLore(lore);
