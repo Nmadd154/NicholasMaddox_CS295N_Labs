@@ -56,36 +56,6 @@ public class PostsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("PostId,Title,Content,Author,LoreType,Rating")] Posts post)
     {
-        if (string.IsNullOrEmpty(post.Title))
-        {
-            ModelState.AddModelError(nameof(post.Title),
-                "Enter a title");
-        }
-        
-        if (string.IsNullOrEmpty(post.Content))
-        {
-            ModelState.AddModelError(nameof(post.Content),
-                "Enter content");
-        }
-        
-        if (string.IsNullOrEmpty(post.Author))
-        {
-            ModelState.AddModelError(nameof(post.Author),
-                "Enter an author name");
-        }
-        
-        if (string.IsNullOrEmpty(post.LoreType))
-        {
-            ModelState.AddModelError(nameof(post.LoreType),
-                "Select a lore type");
-        }
-        
-        if (post.Rating < 1 || post.Rating > 5)
-        {
-            ModelState.AddModelError(nameof(post.Rating),
-                "Rating must be between 1 and 5");
-        }
-
         if (ModelState.IsValid)
         {
             post.CreatedAt = DateTime.Now;

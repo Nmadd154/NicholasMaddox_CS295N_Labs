@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MvcEldenRingBossLore.Data;
 
@@ -11,9 +12,11 @@ using MvcEldenRingBossLore.Data;
 namespace MvcEldenRingBossLore.Migrations
 {
     [DbContext(typeof(MvcEldenRingBossLoreContext))]
-    partial class MvcEldenRingBossLoreContextModelSnapshot : ModelSnapshot
+    [Migration("20260306030736_PostsValidation")]
+    partial class PostsValidation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
