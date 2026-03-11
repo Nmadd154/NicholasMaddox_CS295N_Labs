@@ -1,4 +1,6 @@
 // Created by Nicholas Maddox
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +12,12 @@ namespace MvcEldenRingBossLore.Controllers;
 public class PostsController : Controller
 {
     private readonly MvcEldenRingBossLoreContext _context;
+    private readonly UserManager<AppUser> _userManager;
 
-    public PostsController(MvcEldenRingBossLoreContext context)
+    public PostsController(MvcEldenRingBossLoreContext context, UserManager<AppUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     // GET: Posts
@@ -46,22 +50,29 @@ public class PostsController : Controller
     }
 
     // GET: Posts/Create
+    [Authorize]
     public IActionResult Create()
     {
         return View();
     }
 
     // POST: Posts/Create
+    [Authorize]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("PostId,Title,Content,Author,LoreType,Rating")] Posts post)
+    public async Task<IActionResult> Create([Bind("PostId,Title,Content,LoreType,Rating")] Posts post)
     {
         if (ModelState.IsValid)
         {
-            post.CreatedAt = DateTime.Now;
-            _context.Add(post);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                post.Author = user.Name;
+                post.CreatedAt = DateTime.Now;
+                _context.Add(post);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
         }
         return View(post);
     }

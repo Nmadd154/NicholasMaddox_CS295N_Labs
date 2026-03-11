@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MvcEldenRingBossLore.Models;
 using MvcEldenRingBossLore.Data;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddDbContext<MvcEldenRingBossLoreContext>(options =>
         ServerVersion.AutoDetect(connectionString)
     ));
 
+builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<MvcEldenRingBossLoreContext>();
+
 builder.Services.AddTransient<ILoreRepo, LoreRepo>();
 
 var app = builder.Build();
@@ -26,7 +29,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    SeedData.Initialize(services);
+    await SeedData.Initialize(services);
 }
 
 // Configure the HTTP request pipeline.
@@ -39,14 +42,17 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapRazorPages();
 
 app.Run();
