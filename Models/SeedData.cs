@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace MvcEldenRingBossLore.Models;
 public static class SeedData
 {
+//Everything looks ready to go, and to swtich to lab9 to add the role manager. I was unsure before the last commit if anything needed to be changed :)
     public static async Task Initialize(IServiceProvider serviceProvider)
     {
         using (var context = new MvcEldenRingBossLoreContext(
