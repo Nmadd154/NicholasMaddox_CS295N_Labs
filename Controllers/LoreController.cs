@@ -9,53 +9,51 @@ namespace MvcEldenRingBossLore.Controllers
 {
     public class LoreController : Controller
     {
-        private readonly MvcEldenRingBossLoreContext _context;
+        private readonly ILoreRepo _repository;
 
-        public LoreController(MvcEldenRingBossLoreContext context)
+        public LoreController(ILoreRepo repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: Lore
-        public async Task<IActionResult> Index(string loreType, string searchString)
+        public IActionResult Index(string loreType, string searchString, string discoveryDate)
         {
-            if (_context.Lore == null)
-            {
-                return Problem("Entity set 'MvcEldenRingBossLoreContext.Lore'  is null.");
-            }
-            // Use LINQ to get list of types.
-            IQueryable<string> loreQuery = from m in _context.Lore
-                                             orderby m.GodType
-                                             select m.GodType;
-            var lore = from m in _context.Lore
-                    select m;
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                lore = lore.Where(s => s.Title!.Contains(searchString));
-            }
-            if (!string.IsNullOrEmpty(loreType))
-            {
-                lore = lore.Where(x => x.GodType == loreType);
-            }
+            var allLores = _repository.GetAllLores();
+
+            //LINQ - Get distinct god types
+            var godTypes = allLores
+                .Where(l => !string.IsNullOrEmpty(l.GodType))
+                .Select(l => l.GodType)
+                .Distinct()
+                .OrderBy(g => g)
+                .ToList();
+            
+            // Filter lores based on search criteria
+            var lore = allLores
+                .Where(l => string.IsNullOrEmpty(searchString) || l.Title!.Contains(searchString))
+                .Where(l => string.IsNullOrEmpty(loreType) || l.GodType == loreType)
+                .Where(l => string.IsNullOrEmpty(discoveryDate) || l.DiscoveryDate.Date == DateTime.Parse(discoveryDate).Date)
+                .ToList();
+            
             var loreTypesVM = new LoreTypeViewModel
             {
-                Types = new SelectList(await loreQuery.Distinct().ToListAsync()),
-                Lores = await lore.ToListAsync()
+                Types = new SelectList(godTypes),
+                Lores = lore
             };
         
             return View(loreTypesVM);
         }
 
-        // GET: Lore/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Lore/Details
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var lore = await _context.Lore
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var lore = _repository.GetLoreById(id.Value);
             if (lore == null)
             {
                 return NotFound();
@@ -73,26 +71,38 @@ namespace MvcEldenRingBossLore.Controllers
         // POST: Lore/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,DiscoveryDate,GodType,Notes")] Lore lore)
+        public IActionResult Create([Bind("Id,Title,DiscoveryDate,GodType,Notes")] Lore lore)
         {
+            if (string.IsNullOrEmpty(lore.Title))
+            {
+                ModelState.AddModelError(nameof(lore.Title),
+                    "Please enter a title");
+            }
+            
+            if (string.IsNullOrEmpty(lore.GodType))
+            {
+                ModelState.AddModelError(nameof(lore.GodType),
+                    "Please select a god type");
+            }
+
             if (ModelState.IsValid)
             {
-                _context.Add(lore);
-                await _context.SaveChangesAsync();
+                _repository.CreateLore(lore);
+                _repository.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(lore);
         }
 
-        // GET: Lore/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Lore/Edit
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var lore = await _context.Lore.FindAsync(id);
+            var lore = _repository.GetLoreById(id.Value);
             if (lore == null)
             {
                 return NotFound();
@@ -100,10 +110,10 @@ namespace MvcEldenRingBossLore.Controllers
             return View(lore);
         }
 
-        // POST: Lore/Edit/5
+        // POST: Lore/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,DiscoveryDate,GodType,Notes")] Lore lore)
+        public IActionResult Edit(int id, [Bind("Id,Title,DiscoveryDate,GodType,Notes")] Lore lore)
         {
             if (id != lore.Id)
             {
@@ -114,8 +124,8 @@ namespace MvcEldenRingBossLore.Controllers
             {
                 try
                 {
-                    _context.Update(lore);
-                    await _context.SaveChangesAsync();
+                    _repository.UpdateLore(lore);
+                    _repository.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -133,16 +143,15 @@ namespace MvcEldenRingBossLore.Controllers
             return View(lore);
         }
 
-        // GET: Lore/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Lore/Delete
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var lore = await _context.Lore
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var lore = _repository.GetLoreById(id.Value);
             if (lore == null)
             {
                 return NotFound();
@@ -151,24 +160,24 @@ namespace MvcEldenRingBossLore.Controllers
             return View(lore);
         }
 
-        // POST: Lore/Delete/5
+        // POST: Lore/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var lore = await _context.Lore.FindAsync(id);
+            var lore = _repository.GetLoreById(id);
             if (lore != null)
             {
-                _context.Lore.Remove(lore);
+                _repository.DeleteLore(lore);
             }
 
-            await _context.SaveChangesAsync();
+            _repository.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
         private bool LoreExists(int id)
         {
-            return _context.Lore.Any(e => e.Id == id);
+            return _repository.GetLoreById(id) != null;
         }
     }
 }

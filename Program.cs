@@ -2,44 +2,60 @@
 using Microsoft.EntityFrameworkCore;
 using MvcEldenRingBossLore.Models;
 using MvcEldenRingBossLore.Data;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Configure database - using SQLite for all environments (macOS compatible)
+var baseConnectionString = builder.Configuration.GetConnectionString("MySqlBase");
+var dbUser = builder.Configuration["DbUser"];
+var dbPassword = builder.Configuration["DbPassword"];
+
+var connectionString = $"{baseConnectionString};user={dbUser};password={dbPassword}";
+
 builder.Services.AddDbContext<MvcEldenRingBossLoreContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("MvcEldenRingBossLoreContext") ?? "Data Source=MvcEldenRingBossLore.db"));
+    options.UseMySql(
+        connectionString,
+        ServerVersion.AutoDetect(connectionString)
+    ));
+
+builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<MvcEldenRingBossLoreContext>();
+
+builder.Services.AddTransient<ILoreRepo, LoreRepo>();
 
 var app = builder.Build();
 
-// Auto-create database based on model (dev mode - no migrations needed)
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<MvcEldenRingBossLoreContext>();
-    db.Database.EnsureCreated(); // Creates database automatically from model
+    var services = scope.ServiceProvider;
+    var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    await SeedData.Initialize(services, config);
 }
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapRazorPages();
 
 app.Run();

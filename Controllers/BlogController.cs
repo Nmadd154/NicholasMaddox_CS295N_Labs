@@ -19,7 +19,7 @@ namespace MvcEldenRingBossLore.Controllers
         // GET: Blog
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Lore.ToListAsync());
+            return View(await _context.BlogPosts.ToListAsync());
         }
     }
 }
