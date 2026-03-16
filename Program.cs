@@ -20,7 +20,9 @@ builder.Services.AddDbContext<MvcEldenRingBossLoreContext>(options =>
         ServerVersion.AutoDetect(connectionString)
     ));
 
-builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<MvcEldenRingBossLoreContext>();
+builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<MvcEldenRingBossLoreContext>();
 
 builder.Services.AddTransient<ILoreRepo, LoreRepo>();
 
@@ -29,7 +31,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await SeedData.Initialize(services);
+    var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    await SeedData.Initialize(services, config);
 }
 
 // Configure the HTTP request pipeline.
