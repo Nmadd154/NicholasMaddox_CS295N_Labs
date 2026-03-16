@@ -10,6 +10,8 @@
   <ItemGroup>
     <!-- Exclude test project files from main project compilation -->
     <Compile Remove="EldenRingBossLore.Tests/**" />
+    <Content Remove="EldenRingBossLore.Tests/**" />
+    <None Remove="EldenRingBossLore.Tests/**" />
   </ItemGroup>
 
   <ItemGroup>

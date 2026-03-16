@@ -29,7 +29,7 @@ namespace MvcEldenRingBossLore.Data
                 .Include(l => l.Notes)
                 .Where(l => l.Id == id)
                 .SingleOrDefault();
-            return lore;
+            return lore!;
         }
 
         public Lore CreateLore(Lore lore)

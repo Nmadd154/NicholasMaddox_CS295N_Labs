@@ -49,7 +49,7 @@ public class FakeLoreRepo : ILoreRepo
 
     public Lore GetLoreById(int id)
     {
-        return _loreList.FirstOrDefault(l => l.Id == id);
+        return _loreList.FirstOrDefault(l => l.Id == id)!;
     }
 
     public Lore CreateLore(Lore lore)
